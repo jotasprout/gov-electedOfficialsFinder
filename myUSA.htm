@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>My United States of Knowledge</title>
+    <script src="../js/d3/d3.js"></script>
+</head>
+
+<body>
+	<script>
+		// width and height
+		var w = 1000;
+		var h = 600;
+
+		// map projection
+		var projection = d3.geo.albersUsa()
+							.translate([w/2, h/2])
+							.scale ([1000]);
+
+		// Path generator. This converts GeoJSON to SVG. Also uses albersUsa.
+		var path = d3.geo.path()
+						.projection(projection);
+
+		//create svg element
+		var svg = d3.select("body")
+					.append("svg")
+					.attr("width", w)
+					.attr("height", h);
+
+		// Loading external GeoJSON (JSON that encodes geodata for web apps)
+		d3.json("us-states.json", function(json) {
+			//binding data and creating single svg path per GeoJSON feature (state)
+			svg.selectAll("path") // selects all paths that will be created
+				.data(json.features)
+				.enter()
+				.append("path")
+				.attr("d", path);
+		});
+	</script>
+
+
+</body>
+</html>
